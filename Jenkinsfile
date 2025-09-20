@@ -3,11 +3,11 @@ pipeline {
 
     environment {
         DOCKERHUB_USERNAME = 'osamaanas'
-        DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
+        DOCKERHUB_CREDENTIALS = 'dockerhub-credentials'
         EC2_UAT_IP = '54.221.29.199'
         EC2_PROD_IP = '13.218.127.226'
         SSH_CREDENTIALS_ID = 'aws-ssh-key'
-        DOCKER_IMAGE = "${osamaanas}/dotnet-hello-world"
+        DOCKER_IMAGE = "${DOCKERHUB_USERNAME}/dotnet-hello-world"
     }
 
     parameters {
@@ -27,7 +27,7 @@ pipeline {
         stage('Push to Docker Hub') {
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: "${DOCKERHUB_CREDENTIALS}", passwordVariable: 'Anas@9834', usernameVariable: 'osamaanas')]) {
+                    withCredentials([usernamePassword(credentialsId: "${DOCKERHUB_CREDENTIALS}", passwordVariable: 'DOCKERHUB_PASSWORD', usernameVariable: 'DOCKERHUB_USER')]) {
                         sh "echo ${DOCKERHUB_PASSWORD} | docker login -u ${DOCKERHUB_USER} --password-stdin"
                         sh "docker push ${DOCKER_IMAGE}:${env.BUILD_NUMBER}"
                     }
@@ -39,7 +39,7 @@ pipeline {
             steps {
                 script {
                     def deployIp = (params.DEPLOY_TARGET == 'UAT') ? env.EC2_UAT_IP : env.EC2_PROD_IP
-
+                    
                     sshagent(credentials: ["${SSH_CREDENTIALS_ID}"]) {
                         sh """
                         ssh -o StrictHostKeyChecking=no ubuntu@${deployIp} "
