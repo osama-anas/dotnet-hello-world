@@ -2,10 +2,10 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_USERNAME = 'your-dockerhub-username'
+        DOCKERHUB_USERNAME = 'osamaanas'
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
-        EC2_UAT_IP = 'your-uat-instance-ip'
-        EC2_PROD_IP = 'your-prod-instance-ip'
+        EC2_UAT_IP = '54.221.29.199'
+        EC2_PROD_IP = '13.218.127.226'
         SSH_CREDENTIALS_ID = 'aws-ssh-key'
         DOCKER_IMAGE = "${DOCKERHUB_USERNAME}/dotnet-hello-world"
     }
