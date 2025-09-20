@@ -28,7 +28,7 @@ pipeline {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: "${DOCKERHUB_CREDENTIALS}", passwordVariable: 'Anas@9834', usernameVariable: 'osamaanas')]) {
-                        sh "echo ${Anas@9834} | docker login -u ${osamaanas} --password-stdin"
+                        sh "echo ${DOCKERHUB_PASSWORD} | docker login -u ${DOCKERHUB_USER} --password-stdin"
                         sh "docker push ${DOCKER_IMAGE}:${env.BUILD_NUMBER}"
                     }
                 }
